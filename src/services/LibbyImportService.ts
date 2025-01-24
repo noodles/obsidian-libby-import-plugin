@@ -132,42 +132,13 @@ export class LibbyImportService {
         }
     }
     
-    private formatLibbyData(data: {
-        bookmarks?: Array<{
-            chapter: string;
-            timestamp: number;
-            percent: number;
-        }>;
-        highlights?: Array<{
-            quote: string;
-            timestamp: number;
-            percent: number;
-            chapter: string;
-            color: string;
-        }>;
-        readingJourney: {
-            title: { text: string };
-            author: string;
-            publisher: string;
-            isbn: string;
-            percent: number;
-            cover: { format: string };
-        };
-        circulation: Array<{
-            timestamp: number;
-            activity: string;
-            details?: string;
-            library: { text: string };
-        }>;
-    }): LibbyBook {
+    private formatLibbyData(data: any): LibbyBook {
         // Convert bookmarks to events
-        interface LibbyBookmark {
+        const bookmarkEvents = (data.bookmarks || []).map((bookmark: {
             chapter: string;
             timestamp: number;
             percent: number;
-        }
-
-        const bookmarkEvents = (data.bookmarks || []).map((bookmark: LibbyBookmark) => ({
+        }) => ({
             type: 'Bookmark' as const,
             text: bookmark.chapter,
             timestamp: bookmark.timestamp,
@@ -176,15 +147,13 @@ export class LibbyImportService {
         }));
 
         // Convert highlights to events
-        interface LibbyHighlight {
+        const highlightEvents = (data.highlights || []).map((highlight: {
             quote: string;
             timestamp: number;
             percent: number;
             chapter: string;
             color: string;
-        }
-
-        const highlightEvents = (data.highlights || []).map((highlight: LibbyHighlight) => ({
+        }) => ({
             type: 'Highlight' as const,
             text: highlight.quote,
             timestamp: highlight.timestamp,
