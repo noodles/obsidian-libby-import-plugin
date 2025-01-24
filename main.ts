@@ -156,8 +156,6 @@ class LibbyImportSettingTab extends PluginSettingTab {
         const {containerEl} = this;
         containerEl.empty();
 
-        containerEl.createEl('h2', {text: 'General Settings'});
-
         // New file location
         new Setting(containerEl)
             .setName('New file location')
