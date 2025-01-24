@@ -1,6 +1,6 @@
 # Libby Import Plugin for Obsidian
 
-This plugin allows you to import your Libby ebook highlights and bookmarks directly into Obsidian. It creates well-formatted markdown notes from your Libby reading data, making it easy to reference and organize.
+This plugin allows you to import your [Libby App](https://libbyapp.com/) reading data directly into [Obsidian](https://obsidian.md). It creates well-formatted markdown notes from your Libby JSON data, making it easy to reference and organize.
 
 ## Features
 
@@ -14,7 +14,7 @@ This plugin allows you to import your Libby ebook highlights and bookmarks direc
 1. Open Obsidian Settings
 2. Go to Community Plugins and disable Safe Mode
 3. Click Browse and search for "Libby Import"
-4. Install the plugin![libby-app-data-export-JSON]()
+4. Install the plugin
 
 5. Enable the plugin in your list of installed plugins
 
@@ -36,7 +36,7 @@ This plugin allows you to import your Libby ebook highlights and bookmarks direc
 
 ## Support
 
-If you encounter any issues or have suggestions for improvements, please file an issue on the GitHub repository.
+If you encounter any issues or have suggestions for improvements, please file an [issue](https://github.com/noodles/obsidian-libby-import-plugin/issues) on the GitHub repository.
 
 ## License
 
