@@ -208,7 +208,7 @@ export default class LibbyImportPlugin extends Plugin {
 
         const ribbonIconEl = this.addRibbonIcon(
             'book',
-            'Import Libby Highlights',
+            'Import Libby Reading Data',
             () => {
                 new LibbyImportModal(this.app, this).open();
             }
@@ -217,7 +217,7 @@ export default class LibbyImportPlugin extends Plugin {
 
         this.addCommand({
             id: 'open-libby-import-modal',
-            name: 'Import Libby Highlights',
+            name: 'Import Libby Reading Data',
             callback: () => {
                 new LibbyImportModal(this.app, this).open();
             }
