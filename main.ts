@@ -27,13 +27,15 @@ class LibbyImportModal extends Modal {
         const subheading = contentEl.createEl("p", {
             cls: "libby-import-subheading"
         });
-        subheading.setText("Only JSON files supported. To find out how to export files from Libby ");
+        subheading.setText("To find out how to export files from Libby ");
         const link = subheading.createEl("a", {
             text: "click here",
             href: "https://help.libbyapp.com/en-us/6151.htm",
         });
 
         subheading.createEl("span", { text: "." });
+        subheading.createEl("br");
+        subheading.createEl("span", { text: "Only JSON files are supported." });
 
         const container = contentEl.createEl("div", {
             cls: "libby-import-container"
@@ -83,12 +85,11 @@ class LibbyImportModal extends Modal {
             }
 
             try {
-                new Notice("File import started");
+                this.close(); // Close modal immediately after starting import
                 const content = await file.text();
                 const bookData = await this.importService.parseJsonFile(content);
                 await this.importService.createFile(bookData);
                 new Notice(`Successfully imported ${bookData.title}`);
-                this.close();
             } catch (error) {
                 if (error.message === 'Import cancelled') {
                     new Notice('Import cancelled');
@@ -116,6 +117,13 @@ class FolderSuggest extends AbstractInputSuggest<string> {
         super(app, inputEl);
         this.inputEl = inputEl;
         this.folders = ["/"].concat(this.app.vault.getAllFolders().map(folder => folder.path));
+        
+        // Only show suggestions when user interacts with the input
+        this.inputEl.addEventListener('focus', () => {
+            if (this.inputEl.value) {
+                this.open();
+            }
+        });
     }
 
     getSuggestions(inputStr: string): string[] {
@@ -177,12 +185,17 @@ class LibbyImportSettingTab extends PluginSettingTab {
         new Setting(containerEl)
             .setName('New file name')
             .setDesc(createFragment(frag => {
-                frag.appendText('Enter the file name format. Default: {{title}} - Libby Journey');
+                frag.appendText('Enter the file name format.');
+                frag.createEl('br');
+                frag.appendText('Default: {{title}} - Libby Journey');
                 frag.createEl('br');
                 frag.createEl('br');
-                frag.appendText('Variables: {{title}}, {{author}}, {{publisher}}, {{format}}, {{ISBN}}');
+                frag.appendText('Variables:');
                 frag.createEl('br');
-                frag.appendText('{{dateImported}}, {{dateBorrowed}}.');
+                frag.appendText('{{title}}, {{author}}, {{publisher}}, {{format}}');
+                frag.createEl('br');
+                frag.appendText('{{ISBN}}, {{dateImported}}, {{dateBorrowed}}.');
+                frag.createEl('br');
 
 
             }))

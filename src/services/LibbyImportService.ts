@@ -125,9 +125,45 @@ export class LibbyImportService {
     async parseJsonFile(fileContent: string): Promise<LibbyBook> {
         try {
             const data = JSON.parse(fileContent);
+            
+            // Check if it's a Libby file
+            if (!data.readingJourney || !data.circulation) {
+                throw new Error("The file you have uploaded doesn't look like a Libby data file and could not be imported.");
+            }
+
+            // Check version
+            if (data.version > 1) {
+                const modal = new Notice(
+                    "It looks like Libby has made some changes to their data format that might cause some errors. Please notify the plugin developer.",
+                    0
+                );
+
+                const choice = await new Promise<string>((resolve) => {
+                    const modalEl = modal.noticeEl;
+
+                    const buttonContainer = modalEl.createEl('div', {
+                        cls: 'libby-import-buttons'
+                    });
+
+                    const createButton = (text: string, value: string) => {
+                        const btn = buttonContainer.createEl('button', { text });
+                        btn.addEventListener('click', () => {
+                            modal.hide();
+                            resolve(value);
+                        });
+                    };
+
+                    createButton('Import anyway', 'import');
+                    createButton('Cancel', 'cancel');
+                });
+
+                if (choice === 'cancel') {
+                    throw new Error('Import cancelled');
+                }
+            }
+
             return this.formatLibbyData(data);
         } catch (error) {
-            new Notice('Error parsing JSON file');
             throw error;
         }
     }
